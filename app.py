@@ -9,7 +9,6 @@ if __name__=="__main__":
     # Functions (required)
     # [draw] Draw the faces from the image
     # [count] Count the faces from the image
-    # [judge] Judge whether the image contains a face
     parser.add_argument("function", help="Function to run")
 
     # Input (required)
@@ -40,7 +39,5 @@ if __name__=="__main__":
         draw(arguments.input, arguments.model, arguments.confidence, arguments.output, arguments.thickness)
     elif arguments.function == "count":
         count(arguments.input, arguments.model, arguments.confidence)
-    elif arguments.function == "judge":
-        print("TODO")
     else:
         print(json.dumps({"ok": False, "data": "params error"}))

@@ -22,6 +22,6 @@ def count(image_path: str, model_path: str, confidence: float):
     )
     detector = mp_vision.FaceDetector.create_from_options(options)
     result = detector.detect(mp_image)
-    print(json.dumps({"ok": True, "data": f"{len(result.detections)} faces detected"}))
+    print(json.dumps({"ok": True, "data": len(result.detections)}))
     sys.stdout.flush()
     os._exit(0)

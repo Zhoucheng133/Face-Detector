@@ -36,6 +36,6 @@ def draw(image_path: str, model_path: str, confidence: float, output_path: str, 
         cv2.imwrite(str(target_path), img_bgr)
     else:
         cv2.imwrite(str(output_path), img_bgr)
-    print(json.dumps({"ok": True, "data": f"{len(result.detections)} faces detected"}))
+    print(json.dumps({"ok": True, "data": len(result.detections)}))
     sys.stdout.flush()
     os._exit(0)
