@@ -2,6 +2,7 @@ import argparse
 import json
 
 from utils.draw import draw
+from utils.count import count
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Face Detection")
@@ -37,3 +38,9 @@ if __name__=="__main__":
 
     if arguments.function == "draw":
         draw(arguments.input, arguments.model, arguments.confidence, arguments.output, arguments.thickness)
+    elif arguments.function == "count":
+        count(arguments.input, arguments.model, arguments.confidence)
+    elif arguments.function == "judge":
+        print("TODO")
+    else:
+        print(json.dumps({"ok": False, "data": "params error"}))
