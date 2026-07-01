@@ -1,4 +1,6 @@
 import json
+import os
+import sys
 
 import mediapipe
 from mediapipe.tasks import python as mp_python
@@ -35,3 +37,5 @@ def draw(image_path: str, model_path: str, confidence: float, output_path: str, 
     else:
         cv2.imwrite(str(output_path), img_bgr)
     print(json.dumps({"ok": True, "data": f"{len(result.detections)} faces detected"}))
+    sys.stdout.flush()
+    os._exit(0)
