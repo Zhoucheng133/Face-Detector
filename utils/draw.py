@@ -1,6 +1,12 @@
 import json
 import os
 import sys
+from pathlib import Path
+
+config = Path.home() / ".face_detector_cache"
+config.mkdir(exist_ok=True)
+
+os.environ["MPLCONFIGDIR"] = str(config)
 
 import mediapipe
 from mediapipe.tasks import python as mp_python
