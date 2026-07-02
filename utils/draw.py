@@ -2,6 +2,7 @@ import json
 import os
 import sys
 from pathlib import Path
+import numpy as np
 
 config = Path.home() / ".face_detector_cache"
 config.mkdir(exist_ok=True)
@@ -16,7 +17,7 @@ from pathlib import Path
 import cv2
 
 def draw(image_path: str, model_path: str, confidence: float, output_path: str, thickness: int):
-    img_bgr = cv2.imread(str(image_path))
+    img_bgr = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), cv2.IMREAD_COLOR)
     if img_bgr is None:
         print(json.dumps({"ok": False, "data": "Cannot read image"}))
         return
@@ -39,9 +40,11 @@ def draw(image_path: str, model_path: str, confidence: float, output_path: str, 
         cv2.putText(img_bgr, label, (x, max(y - 5, 15)), cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 3)
     if output_path=="":
         target_path = Path(image_path).parent / "result.jpg"
-        cv2.imwrite(str(target_path), img_bgr)
+        suffix = os.path.splitext(target_path)[-1]
+        cv2.imencode(suffix, img_bgr)[1].tofile(target_path)
     else:
-        cv2.imwrite(str(output_path), img_bgr)
+        suffix = os.path.splitext(output_path)[-1]
+        cv2.imencode(suffix, img_bgr)[1].tofile(output_path)
     print(json.dumps({"ok": True, "data": len(result.detections)}))
     sys.stdout.flush()
     os._exit(0)

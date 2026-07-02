@@ -2,6 +2,7 @@ import json
 import os
 import sys
 from pathlib import Path
+import numpy as np
 
 config = Path.home() / ".face_detector_cache"
 config.mkdir(exist_ok=True)
@@ -15,7 +16,7 @@ from mediapipe.tasks.python import vision as mp_vision
 import cv2
 
 def count(image_path: str, model_path: str, confidence: float):
-    img_bgr = cv2.imread(str(image_path))
+    img_bgr = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), cv2.IMREAD_COLOR)
     if img_bgr is None:
         print(json.dumps({"ok": False, "data": "Cannot read image"}))
         return
