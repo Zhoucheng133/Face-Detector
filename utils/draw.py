@@ -30,6 +30,11 @@ def draw(image_path: str, model_path: str, confidence: float, output_path: str, 
     )
     detector = mp_vision.FaceDetector.create_from_options(options)
     result = detector.detect(mp_image)
+
+    if len(result.detections) == 0:
+        print(json.dumps({"ok": True, "data": 0}))
+        return
+
     for det in result.detections:
         bbox = det.bounding_box
         x, y, bw, bh = bbox.origin_x, bbox.origin_y, bbox.width, bbox.height
