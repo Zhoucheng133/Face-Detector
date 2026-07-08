@@ -1,6 +1,4 @@
-import json
 import os
-import sys
 from pathlib import Path
 import numpy as np
 
@@ -18,8 +16,7 @@ import cv2
 def count(image_path: str, model_path: str, confidence: float):
     img_bgr = cv2.imdecode(np.fromfile(image_path, dtype=np.uint8), cv2.IMREAD_COLOR)
     if img_bgr is None:
-        print(json.dumps({"ok": False, "data": "Cannot read image"}))
-        return
+        return {"ok": False, "data": "Cannot read image"}
     img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
     mp_image = mediapipe.Image(image_format=mediapipe.ImageFormat.SRGB, data=img_rgb)
     base_options = mp_python.BaseOptions(model_asset_path=model_path)
@@ -29,6 +26,4 @@ def count(image_path: str, model_path: str, confidence: float):
     )
     detector = mp_vision.FaceDetector.create_from_options(options)
     result = detector.detect(mp_image)
-    print(json.dumps({"ok": True, "data": len(result.detections)}))
-    sys.stdout.flush()
-    os._exit(0)
+    return {"ok": True, "data": len(result.detections)}
