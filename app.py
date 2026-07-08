@@ -40,15 +40,12 @@ if __name__ == "__main__":
     for img_path in arguments.input:
         if arguments.function == "draw":
             output = arguments.output
-            if len(arguments.input) > 1:
-                p = Path(img_path)
-                if output:
-                    out_dir = Path(output)
-                    out_dir.mkdir(parents=True, exist_ok=True)
-                    output = str(out_dir / p.name)
-                else:
-                    output = str(p.parent / f"{p.stem}_result{p.suffix}")
-            result = draw(img_path, arguments.model, arguments.confidence, output, arguments.thickness)
+            p = Path(img_path)
+            out_dir = Path(arguments.output) if arguments.output else p.parent
+            out_dir.mkdir(parents=True, exist_ok=True)
+            out_file = str(out_dir / f"{p.stem}_draw{p.suffix}")
+
+            result = draw(img_path, arguments.model, arguments.confidence, out_file, arguments.thickness)
         else:
             result = count(img_path, arguments.model, arguments.confidence)
         sys.stdout.write(json.dumps({"file": img_path, **result}) + "\n")
