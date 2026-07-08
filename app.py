@@ -37,6 +37,16 @@ if __name__ == "__main__":
         print(json.dumps({"ok": False, "data": "params error"}))
         sys.exit(1)
 
+    from mediapipe.tasks import python as mp_python
+    from mediapipe.tasks.python import vision as mp_vision
+
+    base_options = mp_python.BaseOptions(model_asset_path=arguments.model)
+    options = mp_vision.FaceDetectorOptions(
+        base_options=base_options,
+        min_detection_confidence=arguments.confidence,
+    )
+    global_detector = mp_vision.FaceDetector.create_from_options(options)
+
     for img_path in arguments.input:
         if arguments.function == "draw":
             output = arguments.output
@@ -45,8 +55,9 @@ if __name__ == "__main__":
             out_dir.mkdir(parents=True, exist_ok=True)
             out_file = str(out_dir / f"{p.stem}_draw{p.suffix}")
 
-            result = draw(img_path, arguments.model, arguments.confidence, out_file, arguments.thickness)
+            result = draw(img_path, global_detector, out_file, arguments.thickness)
         else:
-            result = count(img_path, arguments.model, arguments.confidence)
+            result = count(img_path, global_detector)
+            
         sys.stdout.write(json.dumps({"file": img_path, **result}) + "\n")
         sys.stdout.flush()
