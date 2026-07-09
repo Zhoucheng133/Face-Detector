@@ -47,6 +47,8 @@ if __name__ == "__main__":
     )
     global_detector = mp_vision.FaceDetector.create_from_options(options)
 
+    print(json.dumps({"ok": True, "data": "Initialized"}))
+
     for img_path in arguments.input:
         if arguments.function == "draw":
             output = arguments.output
