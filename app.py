@@ -40,7 +40,18 @@ if __name__ == "__main__":
     from mediapipe.tasks import python as mp_python
     from mediapipe.tasks.python import vision as mp_vision
 
-    base_options = mp_python.BaseOptions(model_asset_path=arguments.model)
+    model_path = Path(arguments.model)
+    if not model_path.is_file():
+        print(json.dumps({"ok": False, "data": f"Model file not found: {model_path}"}))
+        sys.exit(1)
+
+    try:
+        model_bytes = model_path.read_bytes()
+    except OSError as e:
+        print(json.dumps({"ok": False, "data": f"Cannot read model file: {e}"}))
+        sys.exit(1)
+
+    base_options = mp_python.BaseOptions(model_asset_buffer=model_bytes)
     options = mp_vision.FaceDetectorOptions(
         base_options=base_options,
         min_detection_confidence=arguments.confidence,
